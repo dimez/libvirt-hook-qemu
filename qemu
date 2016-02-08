@@ -14,12 +14,12 @@ if [ -z $sourceip ] ; then
 fi
 if [ $1 = $guestname ] ; then
  if [[ $2 == @(stopped|reconnect) ]] ; then
-  $iptables -t nat -D PREROUTING -i $hostif -s $sourceip -d $hostip -p tcp --dport $hostpt -j DNAT --to-destination ${guestip}:${guestpt}
-  $iptables -D FORWARD -i $hostif -s $sourceip -m state --state NEW -m tcp -p tcp -d $guestip --dport $guestpt -j ACCEPT
+  $iptables -w -t nat -D PREROUTING -i $hostif -s $sourceip -d $hostip -p tcp --dport $hostpt -j DNAT --to-destination ${guestip}:${guestpt}
+  $iptables -w -D FORWARD -i $hostif -s $sourceip -m state --state NEW -m tcp -p tcp -d $guestip --dport $guestpt -j ACCEPT
  fi
  if [[ $2 == @(start|reconnect) ]] ; then
-  $iptables -t nat -I PREROUTING -i $hostif -s $sourceip -d $hostip -p tcp --dport $hostpt -j DNAT --to-destination ${guestip}:${guestpt}
-  $iptables -I FORWARD -i $hostif -s $sourceip -m state --state NEW -m tcp -p tcp -d $guestip --dport $guestpt -j ACCEPT
+  $iptables -w -t nat -I PREROUTING -i $hostif -s $sourceip -d $hostip -p tcp --dport $hostpt -j DNAT --to-destination ${guestip}:${guestpt}
+  $iptables -w -I FORWARD -i $hostif -s $sourceip -m state --state NEW -m tcp -p tcp -d $guestip --dport $guestpt -j ACCEPT
  fi
 fi
 done < $datafile

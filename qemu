@@ -1,7 +1,12 @@
 #!/bin/bash
 
 hostif="eth0"
-hostip=$(/sbin/ifconfig "$hostif" | /usr/bin/awk -F: '/inet addr/ {split($2, a, " "); print a[1]}')
+#Leave blank if you need first IP from interface otherwise enter desired ip address
+#hostip=""
+
+if [ -z $hostip ] ; then
+ hostip=$(/sbin/ip addr show "$hostif" | awk '/inet/ {split($2, a, "/"); print a[1]}' | head -n1)
+fi
 
 # Format: guestname,sourceip,hostpt,guestip,guestpt per string
 # leave sourceip field empty for connect from anywhere

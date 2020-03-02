@@ -5,7 +5,7 @@ hostif="eth0"
 #hostip=""
 
 if [ -z $hostip ] ; then
- hostip=$(/sbin/ip addr show "$hostif" | awk '/inet/ {split($2, a, "/"); print a[1]}' | head -n1)
+ hostip=$(/sbin/ip -4 addr show "$hostif" | awk '/inet/ {split($2, a, "/"); print a[1]; exit}')
 fi
 
 # Format: guestname,sourceip,hostpt,guestip,guestpt per string
